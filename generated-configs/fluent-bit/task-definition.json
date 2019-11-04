@@ -1,0 +1,56 @@
+{
+	"family": "firelens-example-twitch-session",
+	"networkMode": "bridge",
+	"executionRoleArn": "arn:aws:iam::144718711470:role/ecsExecutionRole",
+	"taskRoleArn": "arn:aws:iam::144718711470:role/ecs_task_role",
+	"cpu": "512",
+	"memory": "1024",
+	"containerDefinitions": [
+		{
+			"essential": true,
+			"image": "144718711470.dkr.ecr.us-west-2.amazonaws.com/custom-fluent-bit:latest",
+			"name": "log_router",
+			"firelensConfiguration": {
+				"type": "fluentbit",
+				"options": {
+					"config-file-type": "file",
+					"config-file-value": "/fluent-bit.conf"
+				}
+			},
+			"environment": [
+				{
+					"name": "APP_VERSION",
+					"value": "v1.1.14"
+				},
+				{
+					"name": "FLB_LOG_LEVEL",
+					"value": "debug"
+				}
+			],
+			"logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "firelens-json",
+					"awslogs-region": "ap-south-1",
+					"awslogs-create-group": "true",
+					"awslogs-stream-prefix": "json-fix"
+				}
+			},
+			"memoryReservation": 25
+		 },
+		 {
+			 "essential": true,
+			 "image": "144718711470.dkr.ecr.us-west-2.amazonaws.com/better-json-logger:latest",
+			 "name": "app",
+			 "logConfiguration": {
+				 "logDriver":"awsfirelens",
+				 "options": {
+					"Name": "firehose",
+					"region": "ap-south-1",
+					"delivery_stream": "demo-stream",
+					"include-pattern": "[Ee]rror"
+				}
+			}
+		}
+	]
+}
