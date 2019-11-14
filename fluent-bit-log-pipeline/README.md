@@ -15,7 +15,7 @@ As explained in the [Under the Hood: FireLens for Amazon ECS Tasks](todo) (todo:
 
 When you use Fluentd, this ordering matters. When you use Fluent Bit, this ordering does not matter at all. The ordering of the Fluent Bit log processing pipeline is constant.
 
-In the [example task definition](task-definition-json), there are two application containers that use Fluent Bit & FireLens for logging. One of them logs to standard out, and uses a FireLens configured log output. The other, writes to a log file on a volume. This volume is mounted into the Fluent Bit container, and a custom config file contains configuration to tail the log file and then send it to a destination.
+In the [example task definition](task-definition.json), there are two application containers that use Fluent Bit & FireLens for logging. One of them logs to standard out, and uses a FireLens configured log output. The other, writes to a log file on a volume. This volume is mounted into the Fluent Bit container, and a custom config file contains configuration to tail the log file and then send it to a destination.
 
 Note that in the FireLens generated config, the log file input will come after the filter which adds ECS Metadata. However, filters always come after inputs in Fluent Bit's log processing pipeline. Thus, the logs from the log file will have ECS Metadata added to them.
 

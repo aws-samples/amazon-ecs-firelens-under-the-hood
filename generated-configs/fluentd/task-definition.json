@@ -1,14 +1,14 @@
 {
 	"family": "firelens-example-fluentd",
 	"networkMode": "bridge",
-	"executionRoleArn": "arn:aws:iam::144718711470:role/ecsExecutionRole",
-	"taskRoleArn": "arn:aws:iam::144718711470:role/ecs_task_role",
+	"executionRoleArn": "arn:aws:iam::012345678910:role/ecsExecutionRole",
+	"taskRoleArn": "arn:aws:iam::012345678910:role/ecs_task_role",
 	"cpu": "512",
 	"memory": "1024",
 	"containerDefinitions": [
 		{
 			"essential": true,
-			"image": "144718711470.dkr.ecr.ap-south-1.amazonaws.com/awsfluentd",
+			"image": "012345678910.dkr.ecr.ap-south-1.amazonaws.com/awsfluentd",
 			"name": "log_router",
 			"firelensConfiguration": {
 				"type": "fluentd",
@@ -20,7 +20,7 @@
 		 },
 		 {
 			 "essential": true,
-			 "image": "144718711470.dkr.ecr.us-west-2.amazonaws.com/better-json-logger:latest",
+			 "image": "012345678910.dkr.ecr.us-west-2.amazonaws.com/better-json-logger:latest",
 			 "name": "app",
 			 "logConfiguration": {
 				 "logDriver":"awsfirelens",
