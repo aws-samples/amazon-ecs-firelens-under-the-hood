@@ -1,0 +1,55 @@
+{
+	"family": "firelens-example-cloudwatch",
+	"taskRoleArn": "arn:aws:iam::XXXXXXXXXXXX:role/ecs_task_iam_role",
+	"executionRoleArn": "arn:aws:iam::XXXXXXXXXXXX:role/ecs_task_execution_role",
+	"containerDefinitions": [
+		{
+			"essential": true,
+			"image": "906394416424.dkr.ecr.us-east-1.amazonaws.com/aws-for-fluent-bit:latest",
+			"name": "log_router",
+			"firelensConfiguration": {
+				"type": "fluentbit"
+			},
+			"memoryReservation": 50,
+			"mountPoints": [
+				{
+					"containerPath": "/var/log/file-app/",
+					"sourceVolume": "volume-for-file-logs"
+				}
+			]
+		},
+		{
+			 "essential": true,
+			 "image": "<image of any app that sends logs to stdout",
+			 "name": "stdout-app",
+			 "logConfiguration": {
+				 "logDriver":"awsfirelens",
+				 "options": {
+					"Name": "cloudwatch",
+					"region": "us-west-2",
+					"log_group_name": "firelens-fluent-bit",
+					"auto_create_group": "true",
+					"log_stream_prefix": "from-fluent-bit"
+				}
+			},
+			"memoryReservation": 100
+		},
+		{
+			"essential": true,
+			"image": "<image of an app that writes logs to a file on the volume",
+			"name": "file-app",
+			"memoryReservation": 100,
+			"mountPoints": [
+				{
+					"containerPath": "/var/log",
+					"sourceVolume": "volume-for-file-logs"
+				}
+			]
+		}
+	],
+	"volumes": [
+		{
+			"name": "volume-for-file-logs"
+		}
+	]
+}
