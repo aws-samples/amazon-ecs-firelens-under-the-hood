@@ -1,0 +1,49 @@
+{
+	"family": "firehose-log-loss-test-config-c5-fixed",
+	"networkMode": "awsvpc",
+	"executionRoleArn": "arn:aws:iam::144718711470:role/ecsExecutionRole",
+	"taskRoleArn": "arn:aws:iam::144718711470:role/ecs_task_role",
+	"requiresCompatibilities": ["FARGATE"],
+	"cpu": "512",
+	"memory": "1024",
+	"containerDefinitions": [
+		{
+			"essential": true,
+			"image": "906394416424.dkr.ecr.ap-south-1.amazonaws.com/aws-for-fluent-bit:latest",
+			"name": "log_router",
+			"firelensConfiguration": {
+				"type": "fluentbit",
+				"options": {
+					"config-file-type": "file",
+					"config-file-value": "/fluent-bit/configs/minimize-log-loss.conf"
+				}
+			},
+			"environment": [
+				{ "name": "FLB_LOG_LEVEL", "value": "debug" }
+			],
+			"logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "firelens-container",
+					"awslogs-region": "ap-south-1",
+					"awslogs-create-group": "true",
+					"awslogs-stream-prefix": "firehose"
+				}
+			}
+		 },
+		 {
+			 "essential": true,
+			 "image": "144718711470.dkr.ecr.eu-north-1.amazonaws.com/loss-logger:latest",
+			 "command": ["15000", "0"],
+			 "name": "app",
+			 "logConfiguration": {
+				 "logDriver":"awsfirelens",
+				 "options": {
+					"Name": "firehose",
+					"region": "ap-south-1",
+					"delivery_stream": "log-loss-test"
+				}
+			}
+		}
+	]
+}
