@@ -1,6 +1,6 @@
 ## Amazon ECS FireLens: Under the Hood
 
-TODO: Add link to blog post
+https://aws.amazon.com/blogs/containers/under-the-hood-firelens-for-amazon-ecs-tasks/
 
 #### Task Definitions and Generated Configurations
 
