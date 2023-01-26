@@ -1,5 +1,5 @@
 module clean-s3
 
-go 1.12
+go 1.17
 
-require github.com/aws/aws-sdk-go v1.25.19 // indirect
+require github.com/aws/aws-sdk-go v1.42.23
