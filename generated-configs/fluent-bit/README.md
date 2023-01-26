@@ -20,30 +20,7 @@ With FireLens for Amazon ECS, container standard out logs are sent over this soc
 
 FireLens add a configuration for the Forward protocol over TCP. This allows you to use the [Fluent Logger Libraries](https://github.com/fluent/fluent-logger-golang) to send data directly from your application code to Fluent Bit.
 
-```
-[INPUT]
-    Name tcp
-    Tag firelens-healthcheck
-    Listen 127.0.0.1
-    Port 8877
-```
-
-Above, we see the configuration for an optional container health check for Fluent Bit. You can use this with the following health check command:
-
-```
-echo '{"health": "check"}' | nc 127.0.0.1 8877 || exit 1
-```
-
-To enable you to use this health check command, the `nc` command is installed in the `amazon/aws-for-fluent-bit` container image.
-
-The health check command sends logs via the generic TCP input plugin. If the connection is successful, the command is successful and it is assumed that Fluent Bit is accepting logs normally.
-
-```
-[FILTER]
-    Name   grep
-    Match app-firelens*
-    Regex  log [Ee]rror
-```
+**NOTE:** An earlier version of this README noted that FireLens has built-in support for a health-check for Fluent Bit. Please see our [updated health check guidance for FireLens](https://github.com/aws-samples/amazon-ecs-firelens-examples/tree/mainline/examples/fluent-bit/health-check). 
 
 In the example [task definition](task-definition.json), the `include-pattern` field was used to filter the container's logs. That field leads to the creation of this filter.
 
